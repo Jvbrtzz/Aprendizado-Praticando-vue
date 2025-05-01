@@ -18,8 +18,6 @@
   import { obterCategorias } from '@/http'
   import InputText from '@/components/InputText.vue'
   import type ICategoria from '@/interface/ICategoria'
-  import { useStore } from 'vuex';
-  import { computed } from 'vue';
   
   export default {
     name: 'Ingredientes',

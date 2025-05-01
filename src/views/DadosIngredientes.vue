@@ -4,6 +4,7 @@
         <ul>
             <li v-for="ingrediente in categoria" :key="ingrediente.id">
                 <strong>{{ ingrediente.nome }}</strong> - {{ ingrediente.ingredientes }}
+                <button class="trash" @click="removerIngrediente(ingrediente.id)">Apagar</button>
             </li>
         </ul>
     </div>
@@ -13,9 +14,12 @@
 import { useStore } from 'vuex';
 import { computed, onMounted } from 'vue';
 import { obterCategorias } from '@/http';
+import { store } from '@/store';
+import { CLEAR_CATEGORIAS, REMOVE_INGREDIENTE, SET_CATEGORIA } from '@/store/mutations-type';
 
 export default {
     name: "DadosIngredientes",
+
     setup() {
         const store = useStore();
 
@@ -24,9 +28,12 @@ export default {
 
         // Busca os dados da API e atualiza a store
         const carregarCategorias = async () => {
+            // Limpa as categorias antes de carregar novas
+            store.commit(CLEAR_CATEGORIAS);
+
             const categorias = await obterCategorias();
             categorias.forEach((cat) => {
-                store.commit('SET_CATEGORIA', cat);
+                store.commit(SET_CATEGORIA, cat);
             });
         };
 
@@ -38,6 +45,11 @@ export default {
         return {
             categoria,
         };
+    },
+    methods: {
+        removerIngrediente(id: number) {
+            store.commit(REMOVE_INGREDIENTE, id);
+        },
     },
 };
 </script>

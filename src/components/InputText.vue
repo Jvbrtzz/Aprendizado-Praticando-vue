@@ -19,6 +19,7 @@
 </template>
 
 <script>
+import { SET_CATEGORIA } from "@/store/mutations-type";
 import { useStore } from "vuex";
 
 export default {
@@ -48,7 +49,7 @@ export default {
 
             // Comita a mutação para salvar o estado
             if (this.store) {
-                this.store.commit("SET_CATEGORIA", {
+                this.store.commit(SET_CATEGORIA, {
                     nome,
                     ingredientes,
                     imagem,
