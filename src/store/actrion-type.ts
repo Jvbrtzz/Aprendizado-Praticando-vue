@@ -1,0 +1,1 @@
+export const GET_CATEGORIA = 'GET_CATEGORIA';
