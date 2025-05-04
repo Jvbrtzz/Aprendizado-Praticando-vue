@@ -1,6 +1,12 @@
 <template>
     <div class="dados-ingredientes">
         <h1>Lista de Ingredientes</h1>
+        <input 
+            type="text" 
+            placeholder="Filtrar ingredientes..." 
+            v-model="filtro" 
+            class="filtro-input"
+        />
         <ul>
             <li v-for="ingrediente in categoria" :key="ingrediente.id">
                 <strong>{{ ingrediente.nome }}</strong> - {{ ingrediente.ingredientes }}
@@ -33,8 +39,8 @@ export default {
     setup() {
         const store = useStore();
 
-        // Computed para acessar o estado da store
-        const categoria = computed(() => store.state.categoria);
+        // Computed para acessar o estado da store e filtrar os ingredientes
+        const categoria = computed(() => store.state.categoria.filter(c => !filtro.value || c.nome.toLowerCase().includes(filtro.value.toLowerCase())));
 
         // Modal e edição
         const modalAberto = ref(false);
@@ -68,6 +74,12 @@ export default {
             carregarCategorias();
         });
 
+        const removerIngrediente = (name: string) =>{
+            store.commit(REMOVE_INGREDIENTE, name);
+        }
+
+        const filtro = ref('');
+
         return {
             categoria,
             modalAberto,
@@ -75,13 +87,15 @@ export default {
             abrirModal,
             fecharModal,
             salvarEdicao,
+            removerIngrediente,
+            filtro
         };
     },
-    methods: {
-        removerIngrediente(name: string) {
-            this.$store.commit(REMOVE_INGREDIENTE, name);
-        },
-    },
+    // methods: {
+    //      removerIngrediente(name: string) {
+    //          this.$store.commit(REMOVE_INGREDIENTE, name);
+    //      },
+    // },
 };
 </script>
 
@@ -110,6 +124,14 @@ li {
 
 button.edit {
     margin-left: 10px;
+}
+
+.filtro-input {
+    margin-bottom: 20px;
+    padding: 10px;
+    width: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
 }
 
 modal {
